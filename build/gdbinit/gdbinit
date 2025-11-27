@@ -1,0 +1,2 @@
+source /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/gdbinit/symbols
+source /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/gdbinit/connect

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>ESP32 Router Config</title>
+    <style>
+        body { font-family: Arial; margin: 50px; }
+        .card {
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0f0f0;
+        }
+        input { width: 100%; padding: 8px; margin: 5px 0; }
+        button {
+            width: 100%; padding: 10px;
+            margin-top: 10px; background: #1976d2;
+            color: white; border: none; border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESP32 Router</h1>
+    <div class="card">
+        <h3>Wi-Fi Settings</h3>
+        <label>STA SSID:</label>
+        <input id="sta_ssid">
+
+        <label>STA Password:</label>
+        <input id="sta_pass" type="password">
+
+        <button onclick="save()">Save & Reboot</button>
+    </div>
+
+    <script>
+        async function save() {
+            const data = {
+                sta_ssid: document.getElementById("sta_ssid").value,
+                sta_pass: document.getElementById("sta_pass").value
+            };
+
+            await fetch("/save", {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+
+            alert("Saved. Rebooting...");
+        }
+
+        // Load existing config
+        async function load() {
+            const resp = await fetch("/config");
+            const cfg = await resp.json();
+            document.getElementById("sta_ssid").value = cfg.sta_ssid;
+        }
+
+        load();
+    </script>
+</body>
+</html>

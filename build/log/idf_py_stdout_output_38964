@@ -1,0 +1,116 @@
+Command: /home/ututo/.espressif/python_env/idf6.1_py3.12_env/bin/python /home/ututo/esp/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/firewall-extender.elf /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/bootloader/bootloader.elf -m '/home/ututo/.espressif/python_env/idf6.1_py3.12_env/bin/python' '/home/ututo/esp/esp-idf/tools/idf.py'
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6376
+load:0x40078000,len:15900
+ho 0 tail 12 room 4
+load:0x40080400,len:3920
+entry 0x40080644
+[0;32mI (29) boot: ESP-IDF v6.1-dev-853-g80ed20959d-dirty 2nd stage bootloader[0m
+[0;32mI (29) boot: compile time Nov 27 2025 16:23:44[0m
+[0;32mI (29) boot: Multicore bootloader[0m
+[0;32mI (33) boot: chip revision: v3.1[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (79) boot: End of partition table[0m
+[0;32mI (83) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=1ca30h (117296) map[0m
+[0;32mI (132) esp_image: segment 1: paddr=0002ca58 vaddr=3ffb0000 size=035c0h ( 13760) load[0m
+[0;32mI (137) esp_image: segment 2: paddr=00030020 vaddr=400d0020 size=8e804h (583684) map[0m
+[0;32mI (346) esp_image: segment 3: paddr=000be82c vaddr=3ffb35c0 size=00ba4h (  2980) load[0m
+[0;32mI (347) esp_image: segment 4: paddr=000bf3d8 vaddr=40080000 size=154ech ( 87276) load[0m
+[0;32mI (385) esp_image: segment 5: paddr=000d48cc vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (396) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (396) boot: Disabling RNG early entropy source...[0m
+[0;32mI (407) cpu_start: Multicore app[0m
+[0;32mI (415) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (415) cpu_start: Pro cpu start user code[0m
+[0;32mI (415) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (417) app_init: Application information:[0m
+[0;32mI (421) app_init: Project name:     firewall-extender[0m
+[0;32mI (426) app_init: App version:      1[0m
+[0;32mI (429) app_init: Compile time:     Nov 27 2025 16:23:55[0m
+[0;32mI (434) app_init: ELF file SHA256:  af7a063d6...[0m
+[0;32mI (438) app_init: ESP-IDF:          v6.1-dev-853-g80ed20959d-dirty[0m
+[0;32mI (444) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (448) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (452) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (456) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (462) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (467) heap_init: At 3FFB8578 len 00027A88 (158 KiB): DRAM[0m
+[0;32mI (473) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (478) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (483) heap_init: At 400954EC len 0000AB14 (42 KiB): IRAM[0m
+[0;32mI (490) spi_flash: detected chip: generic[0m
+[0;32mI (492) spi_flash: flash io: dio[0m
+[0;33mW (495) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (509) main_task: Started on CPU0[0m
+[0;32mI (519) main_task: Calling app_main()[0m
+[0;32mI (569) wifi:wifi driver task: 3ffc02c0, prio:23, stack:6656, core=0[0m
+[0;32mI (589) wifi:wifi firmware version: 6a8253a[0m
+[0;32mI (589) wifi:wifi certification version: v7.0[0m
+[0;32mI (589) wifi:config NVS flash: enabled[0m
+[0;32mI (589) wifi:config nano formatting: disabled[0m
+[0;32mI (589) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (599) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (599) wifi:Init management short buffer num: 32[0m
+[0;32mI (609) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (609) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (619) wifi:Init static rx buffer num: 10[0m
+[0;32mI (619) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (619) wifi_init: rx ba win: 6[0m
+[0;32mI (629) wifi_init: accept mbox: 6[0m
+[0;32mI (629) wifi_init: tcpip mbox: 32[0m
+[0;32mI (629) wifi_init: udp mbox: 6[0m
+[0;32mI (629) wifi_init: tcp mbox: 6[0m
+[0;32mI (639) wifi_init: tcp tx win: 5760[0m
+[0;32mI (639) wifi_init: tcp rx win: 5760[0m
+[0;32mI (639) wifi_init: tcp mss: 1440[0m
+[0;32mI (649) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (649) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (649) Repeater: INIT_MODE_AP[0m
+[0;32mI (669) Access-Point Proc: AP config done[0m
+[0;32mI (669) Repeater: INIT_MODE_STA[0m
+[0;32mI (669) Station Proc: STA config done[0m
+[0;32mI (669) phy_init: phy_version 4863,a3a4459,Oct 28 2025,14:30:06[0m
+[0;32mI (749) phy_init: Saving new calibration data due to checksum failure or outdated calibration data, mode(0)[0m
+[0;32mI (779) wifi:mode : sta (f0:24:f9:0c:4e:90) + softAP (f0:24:f9:0c:4e:91)[0m
+[0;32mI (779) wifi:enable tsf[0m
+[0;32mI (779) wifi:Total power save buffer number: 16[0m
+[0;32mI (779) wifi:Init max length of beacon: 752/752[0m
+[0;32mI (779) wifi:Init max length of beacon: 752/752[0m
+[0;32mI (789) Station Proc: Station started[0m
+[0;32mI (799) esp_netif_lwip: DHCP server started on interface WIFI_AP_DEF with IP: 192.168.4.1[0m
+[0;32mI (3639) wifi:ap channel adjust o:1,1 n:11,2[0m
+[0;32mI (3639) wifi:new:<11,0>, old:<1,1>, ap:<11,2>, sta:<11,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (3639) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (3649) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (3649) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (3759) wifi:connected with ALMEIRA, aid = 3, channel 11, BW20, bssid = cc:64:a6:61:a0:b1[0m
+[0;32mI (3759) wifi:security: WPA2-PSK, phy: bgn, rssi: -38[0m
+[0;32mI (3769) wifi:pm start, type: 1[0m
+
+[0;32mI (3769) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (3789) wifi:AP's beacon interval = 102400 us, DTIM period = 1[0m
+[0;32mI (3799) wifi:<ba-add>idx:0 (ifx:0, cc:64:a6:61:a0:b1), tid:0, ssn:2, winSize:64[0m
+[0;32mI (4919) Station Proc: Got IP:192.168.100.150[0m
+[0;32mI (4919) esp_netif_handlers: sta ip: 192.168.100.150, mask: 255.255.255.0, gw: 192.168.100.1[0m
+[0;32mI (4919) Station Proc: connected to ap SSID:ALMEIRA password:miriam2277[0m
+[0;32mI (4929) main_task: Returned from app_main()[0m
+[0;32mI (8389) wifi:new:<11,0>, old:<11,0>, ap:<11,2>, sta:<11,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (8389) wifi:station: 96:59:41:6b:67:37 join, AID=1, bgn, 20[0m
+[0;32mI (8519) Access-Point Proc: Station 96:59:41:6b:67:37 joined, AID=1[0m
+[0;32mI (8659) wifi:<ba-add>idx:2 (ifx:1, 96:59:41:6b:67:37), tid:0, ssn:0, winSize:64[0m
+[0;32mI (8759) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2[0m
+[0;32mI (12399) wifi:<ba-add>idx:1 (ifx:0, cc:64:a6:61:a0:b1), tid:4, ssn:0, winSize:64[0m
+[0;32mI (15269) wifi:<ba-add>idx:3 (ifx:1, 96:59:41:6b:67:37), tid:7, ssn:0, winSize:64[0m

@@ -1,0 +1,31 @@
+Command: ninja flash
+[1/5] cd /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build && /home/ututo/.espressif/python_env/idf6.1_py3.12_env/bin/python /home/ututo/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/partition_table/partition-table.bin /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/firewall-extender.bin
+firewall-extender.bin binary size 0xc74d0 bytes. Smallest app partition is 0x100000 bytes. 0x38b30 bytes (22%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/bootloader && /home/ututo/.espressif/python_env/idf6.1_py3.12_env/bin/python /home/ututo/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/bootloader/bootloader.bin
+Bootloader binary size 0x66b0 bytes. 0x950 bytes (8%) free.
+[3/5] No install step for 'bootloader'
+[4/5] Completed 'bootloader'
+[4/5] Running utility command for flash
+esptool --chip esp32 -p /dev/ttyUSB0 -b 460800 --before=default-reset --after=hard-reset write-flash --flash-mode dio --flash-freq 40m --flash-size 2MB 0x1000 bootloader/bootloader.bin 0x8000 partition_table/partition-table.bin 0x10000 firewall-extender.bin
+esptool v5.1.0
+Serial port /dev/ttyUSB0:
+Connecting............
+[1A[2K[1A[2KConnected to ESP32 on /dev/ttyUSB0:
+Chip type:          ESP32-D0WD-V3 (revision v3.1)
+Features:           Wi-Fi, BT, Dual Core + LP Core, 240MHz, Vref calibration in eFuse, Coding Scheme None
+[0;33mWarning:[0m Detected crystal freq 15.55 MHz is quite different to normalized freq 26 MHz. Unsupported crystal in use?
+Crystal frequency:  26MHz
+MAC:                f0:24:f9:0c:4e:90
+
+Uploading stub flasher...
+Running stub flasher...
+[1A[2K[1A[2KStub flasher running.
+Changing baud rate to 460800...
+Changed.
+
+
+Hard resetting via RTS pin...
+[31mFAILED: [0mCMakeFiles/flash.util 
+cd /home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender && /usr/bin/cmake -D IDF_PATH=/home/ututo/esp/esp-idf -D "SERIAL_TOOL=/home/ututo/.espressif/python_env/idf6.1_py3.12_env/bin/python;-m;esptool;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default-reset;--after=hard-reset;write-flash;@flash_args" -D WORKING_DIRECTORY=/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build -P /home/ututo/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+ninja: build stopped: subcommand failed.
