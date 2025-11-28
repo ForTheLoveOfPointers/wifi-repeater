@@ -14,8 +14,8 @@ extern const uint8_t _binary_script_js_end[]   asm("_binary_script_js_end");
 extern const unsigned char _binary_favicon_ico_start[] asm("_binary_favicon_ico_start");
 extern const unsigned char _binary_favicon_ico_end[]   asm("_binary_favicon_ico_end");
 
-/*
-    CONFIG LOADING AND SAVING
+/** 
+ * CONFIG LOADING AND SAVING
 */
 esp_err_t load_config(router_config_t *cfg) {
     nvs_handle_t nvs;
@@ -47,9 +47,9 @@ void save_config(const router_config_t *cfg) {
 
 
 
-/*
-    ROUTING
-*/
+/**
+ * ROUTING
+ */
 
 static esp_err_t load_config_handler(httpd_req_t *req) {
     char res[256];
@@ -151,14 +151,6 @@ static httpd_uri_t root_uri = {
 httpd_handle_t start_webserver(void) {
     httpd_handle_t server = NULL;
     httpd_config_t server_cfg = HTTPD_DEFAULT_CONFIG();    
-
-    #if CONFIG_IDF_TARGET_LINUX
-    // Setting port as 8001 when building for Linux. Port 80 can be used only by a privileged user in linux.
-    // So when a unprivileged user tries to run the application, it throws bind error and the server is not started.
-    // Port 8001 can be used by an unprivileged user as well. So the application will not throw bind error and the
-    // server will be started.
-    config.server_port = 8001;
-    #endif // !CONFIG_IDF_TARGET_LINUX
 
     server_cfg.lru_purge_enable = true;
 

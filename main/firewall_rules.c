@@ -31,6 +31,8 @@ static bool firewall_match_and_deny(struct pbuf *p) {
 
     uint8_t proto = IPH_PROTO(ip_hdr);
     
+    uint16_t src_port = 0, dst_port = 0;
+    
     ip4_addr_t src, dst; 
     ip4_addr_set_u32(&src, iphdr->src.addr); // This function is the officially provided one by lwIP. DO NOT CHANGE
     ip4_addr_set_u32(&dst, iphdr->dest.addr);
@@ -80,4 +82,62 @@ static bool firewall_match_and_deny(struct pbuf *p) {
     /* no rule matched -> default ALLOW (you could flip default) */
     return false;
 
+}
+
+
+/**
+ * PCBs (Protocol Control Blocks)
+ */
+
+ //Necessary callback for the raw_recv function. Processes every packet buffer
+static u8_t fw_raw_recv(void *arg, struct raw_pcb *pcb, struct pbuf *p, const ip_addr_t *addr) {
+    LWIP_UNUSED_ARG(arg);
+    LWIP_UNUSED_ARG(pcb);
+    LWIP_UNUSED_ARG(addr);
+
+    /* If we want to eat/drop the packet: free p and return non-zero */
+    if (firewall_match_and_deny(p)) {
+        pbuf_free(p); /* tell lwIP we've consumed/dropped it */
+        return 1; /* eaten */
+    }
+    /* not matched -> return 0 to let lwIP continue processing */
+    return 0;
+}
+
+/**
+ * Create raw pcbs for protocols we want to control 
+ * Commented udp and icmp to allow later, as tcp will be a testing protocol
+ */
+static struct raw_pcb *pcb_tcp = NULL;
+static struct raw_pcb *pcb_udp = NULL;
+static struct raw_pcb *pcb_icmp = NULL;
+
+static void firewall_create_pcbs(void *arg) {
+    LWIP_UNUSED_ARG(arg);
+
+    pcb_tcp = raw_new(IP_PROTO_TCP);
+    if (pcb_tcp) raw_recv(pcb_tcp, fw_raw_recv, NULL);
+
+    pcb_udp = raw_new(IP_PROTO_UDP);
+    if (pcb_udp) raw_recv(pcb_udp, fw_raw_recv, NULL);
+
+    pcb_icmp = raw_new(IP_PROTO_ICMP);
+    if (pcb_icmp) raw_recv(pcb_icmp, fw_raw_recv, NULL);
+
+    ESP_LOGI(TAG, "firewall pcbs created");
+}
+
+/* call during init — Not static, and runs in tcpip thread via tcpip_callback */
+void firewall_init(void) {
+    /* tcpip_callback runs function on TCP/IP thread. ERR_OK comes from the lwIP specification */
+    if (tcpip_callback(firewall_create_pcbs, NULL) != ERR_OK) {
+        ESP_LOGE(TAG, "tcpip_callback failed");
+    }
+}
+
+/* cleanup if needed (remove raw pcbs) */
+static void firewall_remove_pcbs(void *arg) {
+    if (pcb_tcp) { raw_remove(pcb_tcp); pcb_tcp = NULL; }
+    if (pcb_udp) { raw_remove(pcb_udp); pcb_udp = NULL; }
+    if (pcb_icmp){ raw_remove(pcb_icmp); pcb_icmp = NULL; }
 }
