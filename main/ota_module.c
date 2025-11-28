@@ -4,11 +4,15 @@ const static char *firmware_update_url = "http://server.com/firmware.bin"
 
 const static char *TAG = "OTA task";
 
+extern const uint8_t cert_pem_start[] asm("_binary_certs_cert_pem_start");
+extern const uint8_t cert_pem_end[]   asm("_binary_certs_cert_pem_end");
+
 void perform_ota_update(void) {
     esp_http_client_config_t cfg = {
         .url = firmware_update_url,
-        .timeout_ms = 5000,
-        .skip_cert_common_name_check = true,
+        .client_cert_len = cert_pem_end - cert_pem_start,
+        .cert_pem = (char *)cert_pem_start,
+        .keep_alive_enable = true
     };
 
     esp_https_ota_config_t ota_cfg = {
