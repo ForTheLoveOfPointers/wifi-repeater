@@ -18,6 +18,7 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 #include "http_server.h"
+#include "ota_module.h"
 
 
 // AP SECTION DEFINITIONS
@@ -222,5 +223,6 @@ void app_main(void)
         ESP_LOGE(TAG_STA, "NAPT not enabled on the netif: %p", esp_netif_ap);
     }
 
+    xTaskCreate(perform_ota_update, "ota_task", 8192, NULL, 5, NULL); /** NOTE: Maybe having a task handle could help in the future. */
     start_webserver();
 }

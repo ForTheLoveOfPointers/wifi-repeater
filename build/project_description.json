@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "firewall-extender",
-    "project_version":    "1",
+    "project_version":    "d895e65-dirty",
     "project_path":       "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender",
     "idf_path":           "/home/ututo/esp/esp-idf",
     "build_dir":          "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build",
@@ -1520,12 +1520,12 @@
             "dir": "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main",
             "type": "LIBRARY",
             "lib": "__idf_main",
-            "reqs": [ "esp_wifi", "nvs_flash", "esp_http_server", "spiffs", "espressif__cjson", "web" ],
+            "reqs": [ "esp_wifi", "nvs_flash", "esp_http_server", "espressif__cjson", "web" ],
             "priv_reqs": [ "espressif__cjson" ],
             "managed_reqs": [],
             "managed_priv_reqs": [ "espressif__cjson" ],
             "file": "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main/http_server.c", "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main/firewall-extender.c" ],
+            "sources": [ "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main/firewall_rules.c", "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main/http_server.c", "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main/firewall-extender.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {
@@ -3330,7 +3330,7 @@
             "prefix": "idf",
             "dir": "/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/main",
             "lib": "__idf_main",
-            "reqs": [ "esp_wifi", "nvs_flash", "esp_http_server", "spiffs", "espressif__cjson", "web" ],
+            "reqs": [ "esp_wifi", "nvs_flash", "esp_http_server", "espressif__cjson", "web" ],
             "priv_reqs": [ "espressif__cjson" ],
             "managed_reqs": [],
             "managed_priv_reqs": [ "espressif__cjson" ],

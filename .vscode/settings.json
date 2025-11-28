@@ -2,6 +2,7 @@
     "idf.pythonInstallPath": "/usr/bin/python3",
     "files.associations": {
         "cstdint": "c",
-        "http_server.h": "c"
+        "http_server.h": "c",
+        "ota_module.h": "c"
     }
 }

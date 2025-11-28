@@ -1,4 +1,4 @@
-idf_component_register(SRCS "firewall_rules.c" "http_server.c" "firewall-extender.c"
+idf_component_register(SRCS "ota_module.c" "firewall_rules.c" "http_server.c" "main.c"
                     INCLUDE_DIRS "."
                     REQUIRES esp_wifi
                     REQUIRES nvs_flash
