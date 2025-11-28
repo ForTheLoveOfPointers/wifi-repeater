@@ -2,7 +2,7 @@
 
 A production-style embedded project built on **ESP-IDF** that implements:
 
-- 📶 WiFi extender mode (station + softAP)
+- 📶 WiFi extender mode (STA + softAP)
 - 🔥 Custom packet-inspection firewall using **lwIP PCBs**
 - 🖥️ Embedded Web UI for configuration (SSID, password, firewall rules)
 - 🔄 OTA firmware updates via HTTPS
@@ -25,19 +25,18 @@ Implements a lightweight firewall using:
 - **Protocol Control Blocks (PCBs)**
 - Custom rule evaluation
 
-Supports up to **five configurable rules** from the UI:
+Supports up to **three configurable rules** from the UI:
 - Block IP
 - Block Port
 - Block protocol
-- Allow-only rules
-- Etc.
+
 
 ### Web UI (served directly from the ESP32)
-HTML/CSS/JS UI stored in SPIFFS/partition.  
+HTML/CSS/JS UI stored embedded in flash.  
 Allows live configuration of:
 - Network SSID  
 - Network password  
-- Firewall rules  
+- Firewall rules (future)
 
 UI communicates with the ESP32 through a small REST-style HTTP interface.
 
@@ -54,7 +53,7 @@ Located under `/ota_server`:
 - HTTPS certificates (`cert.pem`, `key.pem`)
 - Simple API
 
-The server is included in this repo for transparency and demonstration purposes.
+The server is included in this repo for transparency and demonstration purposes. Same with the keys and certificates.
 
 ### CI/CD Pipeline
 A GitHub Actions workflow that:
