@@ -1,5 +1,5 @@
 #pragma once
-
+#include <stdbool.h>
 #include "esp_netif.h"
 #include "lwip/raw.h"
 #include "lwip/pbuf.h"

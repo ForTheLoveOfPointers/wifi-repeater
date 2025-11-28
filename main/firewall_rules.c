@@ -1,5 +1,14 @@
 #include "firewall_rules.h"
 
+
+/** 
+ * ATTENTION:
+ * Many implemented rules are very simple and you will have trouble using this for anything other than testing 
+ * and building, on top of it, your own implementation. Parsing can technically be done to some extent, but the ESP32 
+ * is not the best option. If you ever need to parse data to implement some rules regarding, for example, certain content,
+ * you can always use the pbuf_strstr() and pbuf_dechain(), for example, to diminish overhead.
+ * 
+*/
 static fw_rule_t rules[] = {
     {.src = IP_ADDR_ANY, .dst = IP_ADDR_ANY, .proto = IP_PROTO_TCP, .src_port = 0, .dst_port = 23, .action = ACTION_DENY}
 };
@@ -11,10 +20,20 @@ static uint16_t read_u16_be(void* ptr) {
     return (uint16_t)( (b[0] << 8) | b[1]); 
 }
 
+bool ip4_is_any(ip4_addr_t *addr) {
+    return addr->addr == 0;
+}
+
 
 static bool firewall_match_and_deny(struct pbuf *p) {
     struct ip_hdr *iphdr = (struct ip_hdr *)p->payload;
     if(IPH_V(ip_hdr) != 4) return false; // If not IPv4, we don't match rules
+
+    uint8_t proto = IPH_PROTO(ip_hdr);
+    
+    ip4_addr_t src, dst; 
+    ip4_addr_set_u32(&src, iphdr->src.addr); // This function is the officially provided one by lwIP. DO NOT CHANGE
+    ip4_addr_set_u32(&dst, iphdr->dest.addr);
 
     int ihl = IPH_HL(iphdr) * 4;
     // Check if src_port and dst_port are inside the first pbuffer of the chain
