@@ -1248,3 +1248,5 @@
 88	107	1764281001396813534	/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/CMakeFiles/bootloader-complete	357ec41e2f8f986f
 88	107	1764281001396813534	/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/bootloader-prefix/src/bootloader-stamp/bootloader-done	357ec41e2f8f986f
 107	15974	1764271429429812910	CMakeFiles/flash.util	1cc1ccfdc03bcce1
+97	1369494	0	CMakeFiles/menuconfig	3fe608a3718ee74a
+97	1369494	0	/home/ututo/Desktop/embedded-general/esp32/firewall-extender/firewall-extender/build/CMakeFiles/menuconfig	3fe608a3718ee74a
