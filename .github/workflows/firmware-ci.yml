@@ -1,0 +1,40 @@
+name: Build and Upload ESP32 Firmware
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install ESP-IDF framework
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git wget flex bison gperf python3 python3-pip python3-setuptools python3-venv \
+            ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+        git clone -b v5.1 https://github.com/espressif/esp-idf.git /opt/esp-idf
+        cd /opt/esp-idf && ./install.sh
+
+    - name: Export ESP-IDF environment
+      run: |
+        . /opt/esp-idf/export.sh
+        idf.py --version
+
+    - name: Build firmware
+      run: |
+        . /opt/esp-idf/export.sh
+        idf.py build
+
+    - name: Upload firmware to OTA server
+      run: |
+        curl -X POST \
+          -H "X-API-KEY: ${{ secrets.OTA_UPLOAD_KEY }}" \
+          -F "firmware=@build/firewall-extender.bin" \
+          https://YOUR_OTA_SERVER_IP_OR_DOMAIN/upload_firmware
