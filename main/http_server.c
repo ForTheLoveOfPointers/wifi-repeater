@@ -52,15 +52,21 @@ void save_config(const router_config_t *cfg) {
  */
 
 static esp_err_t load_config_handler(httpd_req_t *req) {
-    char res[256];
+    char res[512];
     
     httpd_resp_set_type(req, "application/json");
-    router_config_t cfg;
     
+    char *fw_rules_str = NULL;
+    
+    nvs_handle_t nvs;
+    router_config_t cfg;
+
     load_config(&cfg);
+    load_rules(nvs, fw_rules_str);
+    cJSON_parse()
 
     snprintf(res, sizeof(res), 
-            "{\"sta_ssid\":\"%s\"}", cfg.sta_ssid);
+            "{\"sta_ssid\":\"%s\",\"fw_rules\":\"%s\"}", cfg.sta_ssid, fw_rules_str);
     
 
     httpd_resp_sendstr(req, res);

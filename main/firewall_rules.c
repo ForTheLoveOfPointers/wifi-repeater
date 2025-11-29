@@ -8,10 +8,24 @@
  * is not the best option. If you ever need to parse data to implement some rules regarding, for example, certain content,
  * you can always use the pbuf_strstr() and pbuf_dechain(), for example, to diminish overhead.
  * 
+ * Firewall rules are stored in nvs, inside the firewall_cfg_nvs key, as a JSON string. The JSON structure is like this:
+ * 
+ * {
+ *      config: [
+ *          {src: 0.0.0.0, dst: 0.0.0.0, proto: 0, src_port: 0, dst_port: 23, action: 1},
+ *                                      ...
+ *                                      ...
+ *      ]
+ * }
+ * 
+ * When reading src and dst, you need the aton conversion done, as, to store them as str, you first have to go ntoa
+ * 
 */
-static fw_rule_t rules[] = {
-    {.src = IP_ADDR_ANY, .dst = IP_ADDR_ANY, .proto = IP_PROTO_TCP, .src_port = 0, .dst_port = 23, .action = ACTION_DENY}
-};
+static fw_rule_t rules[5];
+
+const static char *TAG = "fw_rules_mod";
+const static char *firewall_partition_nvs =  "firewall_rules";
+const static char *firewall_cfg_nvs =  "config";
 
 // This makes the header readable, switching bytes [0] and [1]
 // No use of ntohs because bytes might not be aligned
@@ -127,8 +141,40 @@ static void firewall_create_pcbs(void *arg) {
     ESP_LOGI(TAG, "firewall pcbs created");
 }
 
+esp_err_t load_rules(nvs_handle_t nvs, char* buf) {
+    if(nvs_open(firewall_partition_nvs, NVS_READONLY, nvs) != ESP_OK) {
+        return ESP_FAIL;
+    };
+    int size = 0;
+    nvs_get_str(nvs, firewall_cfg_nvs, NULL, &size); // This will retrieve the size of the stored str
+    buf = (char*)malloc(size);
+    nvs_get_str(nvs, firewall_cfg_nvs, buf, &size);
+    nvs_close(nvs);
+    return ESP_OK;
+}
+
+static void make_fw_rules_arr(char *buf) {
+    cJSON *root = cJSON_parse(buf);
+    free(buf);
+    cJSON *arr = cJSON_GetObjectItem(root, firewall_cfg_nvs);
+    int size = cJSON_GetArraySize(arr);
+    for(int i = 0; i < size; i++) {
+        // Do the JSON loading into the firewall_arr
+    }
+}
+
 /* call during init — Not static, and runs in tcpip thread via tcpip_callback */
 void firewall_init(void) {
+    nvs_handle_t nvs;
+    
+    char *fw_rls = NULL;
+    if(load_rules(nvs, fw_rls) != ESP_OK) {
+        ESP_LOGE(TAG, "could not load firewall rules");
+    } else {
+        make_fw_rules_arr(fw_rls);
+    }
+    
+
     /* tcpip_callback runs function on TCP/IP thread. ERR_OK comes from the lwIP specification */
     if (tcpip_callback(firewall_create_pcbs, NULL) != ERR_OK) {
         ESP_LOGE(TAG, "tcpip_callback failed");

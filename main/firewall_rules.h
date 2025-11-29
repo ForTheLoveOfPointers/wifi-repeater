@@ -1,5 +1,6 @@
 #pragma once
 #include <stdbool.h>
+#include <stdlib.h>
 #include "esp_netif.h"
 #include "lwip/raw.h"
 #include "lwip/pbuf.h"
@@ -12,7 +13,11 @@
 #include "esp_log.h"
 #include "esp_system.h"
 #include "lwip/ip4.h"
+#include "nvs_flash.h"
+#include "cJSON.h"
 
+
+void load_rules(nvs_handle_t nvs, char* buf);
 
 /* Simple rule structure: match IP, proto, optional ports */
 typedef enum { ACTION_ALLOW = 0, ACTION_DENY = 1 } fw_action_t;

@@ -4,6 +4,7 @@
 #include "nvs_flash.h"
 #include "cJSON.h"
 #include "esp_spiffs.h"
+#include "firewall_rules.h"
 
 #define AP_SSID "ESP32_wifi"
 #define AP_PASS "h@llo_wifi_2025"

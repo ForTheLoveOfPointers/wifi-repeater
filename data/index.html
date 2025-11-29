@@ -4,23 +4,90 @@
     <meta charset="utf-8"/>
     <title>ESP32 Router Config</title>
     <style>
-        body { font-family: Arial; margin: 50px; }
-        .card {
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f0f0f0;
+        body { 
+            font-family: Arial; 
+            margin: 50px; 
+            background: #e8ecf3;
         }
-        input { width: 100%; padding: 8px; margin: 5px 0; }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .card {
+            max-width: 450px;
+            padding: 25px;
+            margin: 0 auto 30px auto;
+            border-radius: 15px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #444;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 7px 0 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
         button {
-            width: 100%; padding: 10px;
-            margin-top: 10px; background: #1976d2;
-            color: white; border: none; border-radius: 6px;
+            width: 100%; 
+            padding: 12px;
+            margin-top: 15px; 
+            background: #1976d2;
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        button:hover {
+            background: #135ba5;
+        }
+
+        /* ----------------------------- */
+        /* Firewall Rule Styling         */
+        /* ----------------------------- */
+
+        .fw-rule {
+            background: #f7f9fc;
+            border: 1px solid #d1d9e6;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .fw-rule h4 {
+            margin: 0 0 10px 0;
+            color: #2e3a59;
+        }
+
+        .add-rule-btn {
+            margin-top: 10px;
+            background: #2e7d32;
+        }
+        .add-rule-btn:hover {
+            background: #225c25;
+        }
+
+        .action-allow {
+            background: #e4f7e4;
+            color: #2e7d32;
+        }
+        .action-deny {
+            background: #fde4e4;
+            color: #b71c1c;
         }
     </style>
 </head>
 <body>
     <h1>ESP32 Router</h1>
+
     <div class="card">
         <h3>Wi-Fi Settings</h3>
         <label>STA SSID:</label>
@@ -32,11 +99,97 @@
         <button onclick="save()">Save & Reboot</button>
     </div>
 
+    <!-- 🔥 Firewall Rules -->
+    <div class="card">
+        <h3>Firewall Rules (max 5)</h3>
+
+        <div id="fw_rules_container"></div>
+
+        <button class="add-rule-btn" onclick="addRule()">+ Add Rule</button>
+    </div>
+
     <script>
+        let ruleCount = 0;
+        const MAX_RULES = 5;
+
+        function addRule(existing) {
+            if (ruleCount >= MAX_RULES) {
+                alert("Maximum 5 rules.");
+                return;
+            }
+
+            const idx = ruleCount++;
+            const container = document.getElementById("fw_rules_container");
+
+            const div = document.createElement("div");
+            div.className = "fw-rule";
+            div.innerHTML = `
+                <h4>Rule ${idx + 1}</h4>
+
+                <label>Source IP (empty = any):</label>
+                <input id="src_${idx}" placeholder="192.168.1.10">
+
+                <label>Destination IP (empty = any):</label>
+                <input id="dst_${idx}" placeholder="192.168.1.20">
+
+                <label>Protocol:</label>
+                <select id="proto_${idx}">
+                    <option value="6">TCP</option>
+                    <option value="17">UDP</option>
+                    <option value="1">ICMP</option>
+                </select>
+
+                <label>Source Port (0 = any):</label>
+                <input id="src_port_${idx}" type="number" min="0" max="65535" value="0">
+
+                <label>Destination Port (0 = any):</label>
+                <input id="dst_port_${idx}" type="number" min="0" max="65535" value="0">
+
+                <label>Action:</label>
+                <select id="action_${idx}" onchange="styleAction(this)">
+                    <option value="0" class="action-allow">ALLOW</option>
+                    <option value="1" class="action-deny">DENY</option>
+                </select>
+            `;
+
+            container.appendChild(div);
+
+            // populate with existing data
+            if (existing) {
+                document.getElementById("src_" + idx).value = existing.src || "";
+                document.getElementById("dst_" + idx).value = existing.dst || "";
+                document.getElementById("proto_" + idx).value = existing.proto;
+                document.getElementById("src_port_" + idx).value = existing.src_port;
+                document.getElementById("dst_port_" + idx).value = existing.dst_port;
+                document.getElementById("action_" + idx).value = existing.action;
+
+                styleAction(document.getElementById("action_" + idx));
+            }
+        }
+
+        function styleAction(sel) {
+            sel.classList.remove("action-allow", "action-deny");
+            if (sel.value === "0") sel.classList.add("action-allow");
+            else sel.classList.add("action-deny");
+        }
+
         async function save() {
+            const fw_rules = [];
+            for (let i = 0; i < ruleCount; i++) {
+                fw_rules.push({
+                    src: document.getElementById("src_" + i).value,
+                    dst: document.getElementById("dst_" + i).value,
+                    proto: parseInt(document.getElementById("proto_" + i).value),
+                    src_port: parseInt(document.getElementById("src_port_" + i).value),
+                    dst_port: parseInt(document.getElementById("dst_port_" + i).value),
+                    action: parseInt(document.getElementById("action_" + i).value)
+                });
+            }
+
             const data = {
                 sta_ssid: document.getElementById("sta_ssid").value,
-                sta_pass: document.getElementById("sta_pass").value
+                sta_pass: document.getElementById("sta_pass").value,
+                fw_rules: fw_rules
             };
 
             await fetch("/save", {
@@ -47,11 +200,15 @@
             alert("Saved. Rebooting...");
         }
 
-        // Load existing config
         async function load() {
             const resp = await fetch("/config");
             const cfg = await resp.json();
-            document.getElementById("sta_ssid").value = cfg.sta_ssid;
+
+            document.getElementById("sta_ssid").value = cfg.sta_ssid || "";
+
+            if (cfg.fw_rules) {
+                cfg.fw_rules.forEach(r => addRule(r));
+            }
         }
 
         load();
