@@ -40,6 +40,8 @@ Allows live configuration of:
 
 UI communicates with the ESP32 through a small REST-style HTTP interface.
 
+<img src="router_ui.png" alt="UI" style="width: 100px;" />
+
 ### OTA Updates (HTTPS)
 Includes:
 - ESP-IDF OTA implementation
