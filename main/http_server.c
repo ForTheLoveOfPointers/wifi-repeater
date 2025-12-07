@@ -1,4 +1,5 @@
 #include "http_server.h"
+#include "firewall_rules.h"
 
 
 // Linker symbols for embedded files!
@@ -16,7 +17,7 @@ extern const unsigned char _binary_favicon_ico_end[]   asm("_binary_favicon_ico_
 
 /** 
  * CONFIG LOADING AND SAVING
-*/
+ */
 esp_err_t load_config(router_config_t *cfg) {
     nvs_handle_t nvs;
     if(nvs_open("router", NVS_READONLY, &nvs) != ESP_OK) {
@@ -62,8 +63,10 @@ static esp_err_t load_config_handler(httpd_req_t *req) {
     router_config_t cfg;
 
     load_config(&cfg);
-    load_rules(nvs, fw_rules_str);
-    cJSON_parse()
+    
+    if(load_rules(nvs, fw_rules_str) != ESP_OK) {
+        return ESP_FAIL;
+    }
 
     snprintf(res, sizeof(res), 
             "{\"sta_ssid\":\"%s\",\"fw_rules\":\"%s\"}", cfg.sta_ssid, fw_rules_str);

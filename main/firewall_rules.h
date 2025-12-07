@@ -17,6 +17,9 @@
 #include "cJSON.h"
 
 
+const char *firewall_partition_nvs =  "firewall_rules";
+const char *firewall_cfg_nvs =  "config";
+
 void load_rules(nvs_handle_t nvs, char* buf);
 
 /* Simple rule structure: match IP, proto, optional ports */

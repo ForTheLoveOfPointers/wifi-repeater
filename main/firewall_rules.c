@@ -24,8 +24,6 @@
 static fw_rule_t rules[5];
 
 const static char *TAG = "fw_rules_mod";
-const static char *firewall_partition_nvs =  "firewall_rules";
-const static char *firewall_cfg_nvs =  "config";
 
 // This makes the header readable, switching bytes [0] and [1]
 // No use of ntohs because bytes might not be aligned
@@ -158,8 +156,16 @@ static void make_fw_rules_arr(char *buf) {
     free(buf);
     cJSON *arr = cJSON_GetObjectItem(root, firewall_cfg_nvs);
     int size = cJSON_GetArraySize(arr);
+    if(size > 5) 
+        size = 5;
     for(int i = 0; i < size; i++) {
         // Do the JSON loading into the firewall_arr
+        rules[i].src = arr[i].src;
+        rules[i].dst = arr[i].dst;
+        rules[i].proto = arr[i].proto;
+        rules[i].src_port = arr[i].src_port;
+        rules[i].dst_port = arr[i].dst_port;
+        rules[i].action = arr[i].action;
     }
 }
 
