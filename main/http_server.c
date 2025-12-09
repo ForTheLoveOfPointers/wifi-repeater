@@ -68,7 +68,7 @@ static esp_err_t load_config_handler(httpd_req_t *req) {
     
     char *fw_rules_str = NULL;
     
-    nvs_handle_t nvs;
+    nvs_handle_t nvs = 0;
     router_config_t cfg;
 
     load_config(&cfg);
@@ -76,10 +76,10 @@ static esp_err_t load_config_handler(httpd_req_t *req) {
     if(load_rules(nvs, fw_rules_str) != ESP_OK) {
         return ESP_FAIL;
     }
-
-    snprintf(res, sizeof(res), 
-            "{\"sta_ssid\":\"%s\",\"fw_rules\":\"%s\"}", cfg.sta_ssid, fw_rules_str);
-    
+    if(fw_rules_str != NULL) {
+        snprintf(res, sizeof(res), 
+                "{\"sta_ssid\":\"%s\",\"fw_rules\":\"%s\"}", cfg.sta_ssid, fw_rules_str);
+    }
 
     httpd_resp_sendstr(req, res);
     return ESP_OK;

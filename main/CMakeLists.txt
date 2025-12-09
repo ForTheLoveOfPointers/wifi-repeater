@@ -6,5 +6,5 @@ idf_component_register(SRCS "ota_module.c" "firewall_rules.c" "http_server.c" "m
                     REQUIRES esp_https_ota
                     REQUIRES cjson
                     REQUIRES web
-                    EMBED_TXTFILES "certs/cert.pem"
+                    EMBED_TXTFILES cert.pem
                     )

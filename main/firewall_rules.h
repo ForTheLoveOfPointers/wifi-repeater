@@ -1,8 +1,10 @@
 #pragma once
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include "esp_netif.h"
 #include "lwip/raw.h"
+#include "lwip/tcpip.h"
 #include "lwip/pbuf.h"
 #include "lwip/ip.h"
 #include "lwip/inet.h"
@@ -17,8 +19,8 @@
 #include "cJSON.h"
 
 
-const char *firewall_partition_nvs =  "firewall_rules";
-const char *firewall_cfg_nvs =  "config";
+#define firewall_partition_nvs  "firewall_rules"
+#define firewall_cfg_nvs  "config"
 
 esp_err_t load_rules(nvs_handle_t nvs, char *buf);
 

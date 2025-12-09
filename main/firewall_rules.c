@@ -166,23 +166,26 @@ static void make_fw_rules_arr(char *buf) {
     int size = cJSON_GetArraySize(arr);
     if(size > 5) 
         size = 5;
+
     for(int i = 0; i < size; i++) {
         // Do the JSON loading into the firewall_arr
-        rules[i].src = arr[i].src;
-        rules[i].dst = arr[i].dst;
-        rules[i].proto = arr[i].proto;
-        rules[i].src_port = arr[i].src_port;
-        rules[i].dst_port = arr[i].dst_port;
-        rules[i].action = arr[i].action;
+        cJSON * subitem = cJSON_GetArrayItem(arr, i);
+        ip4addr_aton(cJSON_GetObjectItem(subitem, "src")->valuestring, &rules[i].src);
+        ip4addr_aton(cJSON_GetObjectItem(subitem, "dst")->valuestring, &rules[i].dst);
+        
+        rules[i].proto = cJSON_GetObjectItem(subitem, "proto")->valueint;
+        rules[i].src_port = cJSON_GetObjectItem(subitem, "src_port")->valueint;
+        rules[i].dst_port = cJSON_GetObjectItem(subitem, "dst_port")->valueint;
+        rules[i].action = cJSON_GetObjectItem(subitem, "action")->valueint;
     }
 }
 
 /* call during init — Not static, and runs in tcpip thread via tcpip_callback */
 void firewall_init(void) {
-    nvs_handle_t nvs;
+    nvs_handle_t nvs = 0;
     
     char *fw_rls = NULL;
-    if(load_rules(&nvs, fw_rls) != ESP_OK) {
+    if(load_rules(nvs, fw_rls) != ESP_OK) {
         ESP_LOGE(TAG, "could not load firewall rules");
     } else {
         make_fw_rules_arr(fw_rls);
@@ -196,8 +199,12 @@ void firewall_init(void) {
 }
 
 /* cleanup if needed (remove raw pcbs) */
+/**
+
 static void firewall_remove_pcbs(void *arg) {
     if (pcb_tcp) { raw_remove(pcb_tcp); pcb_tcp = NULL; }
     if (pcb_udp) { raw_remove(pcb_udp); pcb_udp = NULL; }
     if (pcb_icmp){ raw_remove(pcb_icmp); pcb_icmp = NULL; }
 }
+
+*/
