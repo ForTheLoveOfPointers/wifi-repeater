@@ -3,7 +3,6 @@
 #include "esp_http_server.h"
 #include "nvs_flash.h"
 #include "cJSON.h"
-#include "esp_spiffs.h"
 #include "firewall_rules.h"
 
 #define AP_SSID "ESP32_wifi"

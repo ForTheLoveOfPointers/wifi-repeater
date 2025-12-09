@@ -21,7 +21,7 @@
  * When reading src and dst, you need the aton conversion done, as, to store them as str, you first have to go ntoa
  * 
 */
-static fw_rule_t rules[5];
+static fw_rule_t rules[5] = {0};
 
 const static char *TAG = "fw_rules_mod";
 
@@ -39,9 +39,9 @@ bool ip4_is_any(ip4_addr_t *addr) {
 
 static bool firewall_match_and_deny(struct pbuf *p) {
     struct ip_hdr *iphdr = (struct ip_hdr *)p->payload;
-    if(IPH_V(ip_hdr) != 4) return false; // If not IPv4, we don't match rules
+    if(IPH_V(iphdr) != 4) return false; // If not IPv4, we don't match rules
 
-    uint8_t proto = IPH_PROTO(ip_hdr);
+    uint8_t proto = IPH_PROTO(iphdr);
     
     uint16_t src_port = 0, dst_port = 0;
     
@@ -68,6 +68,14 @@ static bool firewall_match_and_deny(struct pbuf *p) {
     }
 
      /* match rules in order; first match wins */
+     size_t rules_count = 0;
+     for(size_t i = 0; i < 5; i++) {
+        if (memcmp(&rules[i], &(fw_rule_t){0}, sizeof(fw_rule_t)) == 0) {
+            rules_count++;
+        } else {
+            break;
+        }
+     }
     for (size_t i = 0; i < rules_count; ++i) {
         fw_rule_t *r = &rules[i];
 
@@ -139,11 +147,11 @@ static void firewall_create_pcbs(void *arg) {
     ESP_LOGI(TAG, "firewall pcbs created");
 }
 
-esp_err_t load_rules(nvs_handle_t nvs, char* buf) {
-    if(nvs_open(firewall_partition_nvs, NVS_READONLY, nvs) != ESP_OK) {
+esp_err_t load_rules(nvs_handle_t nvs, char *buf) {
+    if(nvs_open(firewall_partition_nvs, NVS_READONLY, &nvs) != ESP_OK) {
         return ESP_FAIL;
     };
-    int size = 0;
+    size_t size = 0;
     nvs_get_str(nvs, firewall_cfg_nvs, NULL, &size); // This will retrieve the size of the stored str
     buf = (char*)malloc(size);
     nvs_get_str(nvs, firewall_cfg_nvs, buf, &size);
@@ -152,7 +160,7 @@ esp_err_t load_rules(nvs_handle_t nvs, char* buf) {
 }
 
 static void make_fw_rules_arr(char *buf) {
-    cJSON *root = cJSON_parse(buf);
+    cJSON *root = cJSON_Parse(buf);
     free(buf);
     cJSON *arr = cJSON_GetObjectItem(root, firewall_cfg_nvs);
     int size = cJSON_GetArraySize(arr);
@@ -174,7 +182,7 @@ void firewall_init(void) {
     nvs_handle_t nvs;
     
     char *fw_rls = NULL;
-    if(load_rules(nvs, fw_rls) != ESP_OK) {
+    if(load_rules(&nvs, fw_rls) != ESP_OK) {
         ESP_LOGE(TAG, "could not load firewall rules");
     } else {
         make_fw_rules_arr(fw_rls);

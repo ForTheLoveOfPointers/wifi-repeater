@@ -47,6 +47,15 @@ void save_config(const router_config_t *cfg) {
 }
 
 
+static void save_fw_rules(char *fw_rules) {
+    nvs_handle_t nvs;
+    nvs_open(firewall_partition_nvs, NVS_READWRITE, &nvs);
+
+    nvs_set_str(nvs, firewall_cfg_nvs, fw_rules);
+
+    nvs_commit(nvs);
+    nvs_close(nvs);
+}
 
 /**
  * ROUTING
@@ -88,6 +97,7 @@ static esp_err_t save_config_handler(httpd_req_t *req) {
     httpd_resp_set_type(req, "text/html");
 
     char buf[256];
+    char *fw_rules = NULL;
     int len = httpd_req_recv(req, buf, sizeof(buf));
     buf[len] = 0;
 
@@ -97,7 +107,7 @@ static esp_err_t save_config_handler(httpd_req_t *req) {
     strcpy(cfg.sta_ssid, cJSON_GetObjectItem(json, "sta_ssid")->valuestring);
     strcpy(cfg.sta_pass, cJSON_GetObjectItem(json, "sta_pass")->valuestring);
     save_config(&cfg);
-
+    save_fw_rules(fw_rules);
     cJSON_Delete(json);
     httpd_resp_sendstr(req, "OK");
 

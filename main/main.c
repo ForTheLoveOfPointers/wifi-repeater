@@ -34,8 +34,8 @@
 
 // STA SECTION DEFINITIONS
 /* STA Configuration */
-#define STA_SSID         STA_SSID_TO_EXTEND
-#define STA_PASS         STA_PASS_TO_EXTEND
+#define STA_SSID         STA_SSID_DEFINE
+#define STA_PASS         STA_PASS_DEFINE
 #define MAXIMUM_RETRY           3
 
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD   WIFI_AUTH_WPA2_PSK

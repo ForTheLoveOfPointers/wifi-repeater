@@ -20,7 +20,7 @@
 const char *firewall_partition_nvs =  "firewall_rules";
 const char *firewall_cfg_nvs =  "config";
 
-void load_rules(nvs_handle_t nvs, char* buf);
+esp_err_t load_rules(nvs_handle_t nvs, char *buf);
 
 /* Simple rule structure: match IP, proto, optional ports */
 typedef enum { ACTION_ALLOW = 0, ACTION_DENY = 1 } fw_action_t;
