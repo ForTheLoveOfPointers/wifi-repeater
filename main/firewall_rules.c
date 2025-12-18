@@ -46,10 +46,11 @@ static bool firewall_match_and_deny(struct pbuf *p) {
     uint16_t src_port = 0, dst_port = 0;
     
     ip4_addr_t src, dst; 
-    ip4_addr_set_u32(&src, iphdr->src.addr); // This function is the officially provided one by lwIP. DO NOT CHANGE
+    ip4_addr_set_u32(&src, iphdr->src.addr);
     ip4_addr_set_u32(&dst, iphdr->dest.addr);
 
-    int ihl = IPH_HL(iphdr) * 4;
+    int ihl = IPH_HL(iphdr) * 4; // This returns everything in number of words, so multiply by 4 to convert
+
     // Check if src_port and dst_port are inside the first pbuffer of the chain
     // If not, then it is better not to continue, for now
     if (ihl + 4 <= p->len) {
